@@ -7,7 +7,7 @@ n = [2500, 2500];  % number of data points from each manifold
 D = 50;  % the ambient dimension 
 d = 2;   % the intrinsic dimenison
 rotation = [0, pi/2]; % rotate randomly generated horizontal manifolds by an angle. 
-tau = 0.05; 
+tau = 0.05; % overall noise. 
 noise_type = 'uniform'; 
 
 data = zeros([sum(n) D]); labels = zeros([sum(n) 1]);
@@ -46,12 +46,15 @@ for j = 1:length(n)
   labels(row1:row2) = j;
 end
 
+%% Here is a visualization of the data (projected onto a 3-D space). 
+
 plot3(data(1:n(1),1),data(1:n(1),2),data(1:n(1),3),'.')
 hold on 
 plot3(data(n(1)+1:n(1)+n(2),1),data(n(1)+1:n(1)+n(2),2),data(n(1)+1:n(1)+n(2),3),'.')
 hold off
 
 %% Here is where you run the SVD code. 
+
 parallel = 0;    
 EstDimopts = struct('NumberOfTrials',3,'verbose',0,'MAXDIM',size(data,2),'MAXAMBDIM',size(data,2),'Ptwise',0,'PtIdxs',0,'NetsOpts',[],'UseSmoothedS',0,'EnlargeScales',0,'Deltas',[],'KeepV',0,'kNN',[],'AllPtsFast',0,'DownSample',1,'RandomizedSVDThres',inf);
 [d_est,noise_margin] = EstDim_MSVD(data', parallel, EstDimopts);
